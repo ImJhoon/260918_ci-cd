@@ -50,3 +50,12 @@ jobs:
       # 실패 시 종료 코드가 0이 아니어서 잡 실패 처리됨
       - name: Run Gradle tests
         run: ./gradlew test # 전체 테스트 실행 및 통과 검증
+
+      # 테스트 실패해도 보고서는 남겨야 원인 파악 가능
+      - name: Upload test HTML report
+        if: always() # 성공/실패 상관없이 항상 업로드
+        # v7 : 압축 방식 개선된 최신 업로드 액션
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-report # Actions 탭에서 표시될 이름
+          path: build/reports/tests/test # gradle test HTML 보고서 경로
