@@ -29,3 +29,13 @@ export INSTANCE_ID=$(aws ec2 describe-instances \
 export PUBLIC_IP=$(aws ec2 describe-instances \
   --instance-ids "$INSTANCE_ID" \
   --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+
+sudo docker run -d \
+  --name watchtower-poll \
+  --restart unless-stopped \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e DOCKER_API_VERSION=1.44 \
+  containrrr/watchtower\
+  --interval 30 \
+  --cleanup \
+  app-blue
